@@ -16,3 +16,8 @@
 
 version = "1.3+"
 """Current version of PyMongo."""
+
+ASCENDING = 1
+"""Ascending sort order."""
+DESCENDING = -1
+"""Descending sort order."""

@@ -208,12 +208,20 @@ class Collection(object):
         return self.__safe_operation(proto, safe)
 
     def save(self, doc, safe=False):
+        """
+        If doc already has an "_id" then an update() (upsert) operation is 
+        performed and any existing document with that "_id" is overwritten. 
+        Otherwise an "_id" will be added to to_save and an insert() operation 
+        is performed. 
+        Returns the "_id" of the saved document.
+        """
         if not isinstance(doc, types.DictType):
             raise TypeError("cannot save objects of type %s" % type(doc))
 
         objid = doc.get("_id")
         if objid:
-            return self.update({"_id": objid}, doc, safe=safe)
+            # Upsert on save: overwrites any existing or adds the object by its _id
+            return self.update({"_id": objid}, doc, upsert=True, safe=safe)
         else:
             return self.insert(doc, safe=safe)
 
